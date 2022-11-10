@@ -1,7 +1,8 @@
 const express = require('express')
 const app = express()
+const cors = require('cors')
 
-app.use(express.json())
+app.use(cors())
 
 let notes = [
   {
@@ -23,6 +24,20 @@ let notes = [
     important: true
   }
 ]
+
+// requestLogger must be placed up here to be the first route
+// in a file so that it can log all routes below!
+const requestLogger = (request, response, next) => {
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+
+app.use(requestLogger)
+
+app.use(express.json())
 
 // Prevent favicon.ico 404 error
 // Catch the favicon.ico request and send a 204 'No Content' status:
@@ -84,6 +99,17 @@ app.post('/api/notes', (request, response) => {
 
   response.json(note)
 })
+
+// unknownEndpoint must be placed down here
+// in a file. It will then send response
+// if none of the routes above didn't respond!
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({
+    error: 'unknown endpoint'
+})
+}
+
+app.use(unknownEndpoint)
 
 const PORT = 3001
 app.listen(PORT, () => {

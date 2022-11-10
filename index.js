@@ -1,6 +1,14 @@
 const express = require('express')
 const app = express()
 
+// Cross-Origin Resource Sharing
+const cors = require('cors')
+// taking cors into use
+app.use(cors())
+
+// Trying to use '.env' file for PORT setting
+console.log(require('dotenv').config())
+
 let notes = [
   {
     id: 1,
@@ -108,7 +116,12 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint)
 
-const PORT = 3001
+// When using PaaS (i.e. Platform as a Service) platform
+// const PORT = 3001 needs to be defined as a environment variable
+// because PaaS will check port from ENVIRONMENT VALUE: 'PORT'
+// I set the port from '.env' and not from Operating System environment.
+// If problems reading '.env' file or it's missing, fallback to default :3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
