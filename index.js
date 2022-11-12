@@ -1,5 +1,9 @@
 const express = require('express')
 const app = express()
+// HTTP GET request it will first check if the build directory contains a file
+// corresponding to the request's address. If a correct file is found,
+// express will return it.
+app.use(express.static('build'))
 
 // Cross-Origin Resource Sharing
 const cors = require('cors')

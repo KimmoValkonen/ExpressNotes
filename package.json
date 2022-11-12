@@ -6,7 +6,10 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "git push origin main",
+    "build:ui": "rd /s /q build && cd ..\\notes2 && npm run build && cd ..\\ExpressNotes && md build && cd build && xcopy /s /e /v ..\\..\\notes2\\build\\*.* && cd ..",
+    "deploy:full": "npm run build:ui && git add --all && git commit -m uibuild && npm run deploy"
   },
   "author": "Kimmo Valkonen",
   "license": "MIT",
@@ -15,6 +18,7 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2"
   },
+  "proxy": "http://localhost:3001",
   "devDependencies": {
     "nodemon": "^2.0.20"
   }
